@@ -22,3 +22,24 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Command\Neo\ImportCommand:
+        arguments:
+            - '@App\Tools\Import\Import'
+
+    App\Tools\Import\Import:
+        arguments:
+            - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+            - '@App\Repository\NeoRepository'
+            - '@App\Factory\NeoFactory'
+            - '%env(NASA_API_URL)%'
+            - '%env(NASA_API_KEY)%'
+    App\Serializer\NeoNormalizer:
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+            - '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer'
+
+    App\Serializer\NeoListNormalizer:
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+            - '@App\Serializer\NeoNormalizer'
